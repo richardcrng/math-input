@@ -1,172 +1,217 @@
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 /**
  * A keypad that includes the digits, as well as the symbols required to deal
  * with fractions, decimals, and percents.
  */
 
-const React = require('react');
-const PropTypes = require('prop-types');
-const {connect} = require('react-redux');
+var React = require('react');
+var PropTypes = require('prop-types');
 
-const {View} = require('../fake-react-native-web');
-const Keypad = require('./keypad');
-const TouchableKeypadButton = require('./touchable-keypad-button');
-const {row, roundedTopLeft, roundedTopRight} = require('./styles');
-const {BorderStyles} = require('../consts');
-const CursorContexts = require('./input/cursor-contexts');
-const {cursorContextPropType} = require('./prop-types');
-const KeyConfigs = require('../data/key-configs');
+var _require = require('react-redux'),
+    connect = _require.connect;
 
-class FractionKeypad extends React.Component {
-    static propTypes = {
-        cursorContext: cursorContextPropType.isRequired,
-        dynamicJumpOut: PropTypes.bool,
-        roundTopLeft: PropTypes.bool,
-        roundTopRight: PropTypes.bool,
-    };
+var _require2 = require('../fake-react-native-web'),
+    View = _require2.View;
 
-    static rows = 4;
-    static columns = 4;
+var Keypad = require('./keypad');
+var TouchableKeypadButton = require('./touchable-keypad-button');
 
-    // Since we include a two-key popover in the top-right, when the popover
-    // is visible, the keypad will expand to fill the equivalent of five
-    // rows vertically.
-    static maxVisibleRows = 5;
+var _require3 = require('./styles'),
+    row = _require3.row,
+    roundedTopLeft = _require3.roundedTopLeft,
+    roundedTopRight = _require3.roundedTopRight;
 
-    static numPages = 1;
+var _require4 = require('../consts'),
+    BorderStyles = _require4.BorderStyles;
 
-    render() {
-        const {
-            cursorContext,
-            dynamicJumpOut,
-            roundTopLeft,
-            roundTopRight,
-        } = this.props;
+var CursorContexts = require('./input/cursor-contexts');
 
-        let dismissOrJumpOutKey;
-        if (dynamicJumpOut) {
-            switch (cursorContext) {
-                case CursorContexts.IN_PARENS:
-                    dismissOrJumpOutKey = KeyConfigs.JUMP_OUT_PARENTHESES;
-                    break;
+var _require5 = require('./prop-types'),
+    cursorContextPropType = _require5.cursorContextPropType;
 
-                case CursorContexts.IN_SUPER_SCRIPT:
-                    dismissOrJumpOutKey = KeyConfigs.JUMP_OUT_EXPONENT;
-                    break;
+var KeyConfigs = require('../data/key-configs');
 
-                case CursorContexts.IN_SUB_SCRIPT:
-                    dismissOrJumpOutKey = KeyConfigs.JUMP_OUT_BASE;
-                    break;
+var FractionKeypad = function (_React$Component) {
+    _inherits(FractionKeypad, _React$Component);
 
-                case CursorContexts.BEFORE_FRACTION:
-                    dismissOrJumpOutKey = KeyConfigs.JUMP_INTO_NUMERATOR;
-                    break;
+    function FractionKeypad() {
+        _classCallCheck(this, FractionKeypad);
 
-                case CursorContexts.IN_NUMERATOR:
-                    dismissOrJumpOutKey = KeyConfigs.JUMP_OUT_NUMERATOR;
-                    break;
+        return _possibleConstructorReturn(this, (FractionKeypad.__proto__ || Object.getPrototypeOf(FractionKeypad)).apply(this, arguments));
+    }
 
-                case CursorContexts.IN_DENOMINATOR:
-                    dismissOrJumpOutKey = KeyConfigs.JUMP_OUT_DENOMINATOR;
-                    break;
+    _createClass(FractionKeypad, [{
+        key: 'render',
 
-                case CursorContexts.NONE:
-                default:
-                    dismissOrJumpOutKey = KeyConfigs.DISMISS;
-                    break;
+
+        // Since we include a two-key popover in the top-right, when the popover
+        // is visible, the keypad will expand to fill the equivalent of five
+        // rows vertically.
+        value: function render() {
+            var _props = this.props,
+                cursorContext = _props.cursorContext,
+                dynamicJumpOut = _props.dynamicJumpOut,
+                roundTopLeft = _props.roundTopLeft,
+                roundTopRight = _props.roundTopRight;
+
+
+            var dismissOrJumpOutKey = void 0;
+            if (dynamicJumpOut) {
+                switch (cursorContext) {
+                    case CursorContexts.IN_PARENS:
+                        dismissOrJumpOutKey = KeyConfigs.JUMP_OUT_PARENTHESES;
+                        break;
+
+                    case CursorContexts.IN_SUPER_SCRIPT:
+                        dismissOrJumpOutKey = KeyConfigs.JUMP_OUT_EXPONENT;
+                        break;
+
+                    case CursorContexts.IN_SUB_SCRIPT:
+                        dismissOrJumpOutKey = KeyConfigs.JUMP_OUT_BASE;
+                        break;
+
+                    case CursorContexts.BEFORE_FRACTION:
+                        dismissOrJumpOutKey = KeyConfigs.JUMP_INTO_NUMERATOR;
+                        break;
+
+                    case CursorContexts.IN_NUMERATOR:
+                        dismissOrJumpOutKey = KeyConfigs.JUMP_OUT_NUMERATOR;
+                        break;
+
+                    case CursorContexts.IN_DENOMINATOR:
+                        dismissOrJumpOutKey = KeyConfigs.JUMP_OUT_DENOMINATOR;
+                        break;
+
+                    case CursorContexts.NONE:
+                    default:
+                        dismissOrJumpOutKey = KeyConfigs.DISMISS;
+                        break;
+                }
+            } else {
+                dismissOrJumpOutKey = KeyConfigs.DISMISS;
             }
-        } else {
-            dismissOrJumpOutKey = KeyConfigs.DISMISS;
-        }
 
-        return <Keypad>
-            <View style={row}>
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.NUM_7}
-                    borders={BorderStyles.NONE}
-                    style={roundTopLeft && roundedTopLeft}
-                />
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.NUM_8}
-                    borders={BorderStyles.NONE}
-                />
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.NUM_9}
-                    borders={BorderStyles.NONE}
-                />
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.FRAC}
-                    disabled={
+            return React.createElement(
+                Keypad,
+                null,
+                React.createElement(
+                    View,
+                    { style: row },
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.NUM_7,
+                        borders: BorderStyles.NONE,
+                        style: roundTopLeft && roundedTopLeft
+                    }),
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.NUM_8,
+                        borders: BorderStyles.NONE
+                    }),
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.NUM_9,
+                        borders: BorderStyles.NONE
+                    }),
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.FRAC,
+                        disabled:
                         // NOTE(charlie): It's only sufficient to use
                         // `IN_NUMERATOR` and `IN_DENOMINATOR` here because we
                         // don't support parentheses in this keypad. If we did,
                         // then when the cursor was inside a parenthetical
                         // expression in a numerator or denominator, this check
                         // would fail.
-                        cursorContext === CursorContexts.IN_NUMERATOR ||
-                        cursorContext === CursorContexts.IN_DENOMINATOR
-                    }
-                    style={roundTopRight && roundedTopRight}
-                />
-            </View>
-            <View style={row}>
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.NUM_4}
-                    borders={BorderStyles.NONE}
-                />
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.NUM_5}
-                    borders={BorderStyles.NONE}
-                />
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.NUM_6}
-                    borders={BorderStyles.NONE}
-                />
-                <TouchableKeypadButton keyConfig={KeyConfigs.PERCENT} />
-            </View>
-            <View style={row}>
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.NUM_1}
-                    borders={BorderStyles.BOTTOM}
-                />
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.NUM_2}
-                    borders={BorderStyles.NONE}
-                />
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.NUM_3}
-                    borders={BorderStyles.BOTTOM}
-                />
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.BACKSPACE}
-                    borders={BorderStyles.LEFT}
-                />
-            </View>
-            <View style={row}>
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.NEGATIVE}
-                    borders={BorderStyles.NONE}
-                />
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.NUM_0}
-                    borders={BorderStyles.LEFT}
-                />
-                <TouchableKeypadButton
-                    keyConfig={KeyConfigs.DECIMAL}
-                    borders={BorderStyles.LEFT}
-                />
-                <TouchableKeypadButton
-                    keyConfig={dismissOrJumpOutKey}
-                    borders={BorderStyles.LEFT}
-                />
-            </View>
-        </Keypad>;
-    }
-}
+                        cursorContext === CursorContexts.IN_NUMERATOR || cursorContext === CursorContexts.IN_DENOMINATOR,
+                        style: roundTopRight && roundedTopRight
+                    })
+                ),
+                React.createElement(
+                    View,
+                    { style: row },
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.NUM_4,
+                        borders: BorderStyles.NONE
+                    }),
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.NUM_5,
+                        borders: BorderStyles.NONE
+                    }),
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.NUM_6,
+                        borders: BorderStyles.NONE
+                    }),
+                    React.createElement(TouchableKeypadButton, { keyConfig: KeyConfigs.PERCENT })
+                ),
+                React.createElement(
+                    View,
+                    { style: row },
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.NUM_1,
+                        borders: BorderStyles.BOTTOM
+                    }),
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.NUM_2,
+                        borders: BorderStyles.NONE
+                    }),
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.NUM_3,
+                        borders: BorderStyles.BOTTOM
+                    }),
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.BACKSPACE,
+                        borders: BorderStyles.LEFT
+                    })
+                ),
+                React.createElement(
+                    View,
+                    { style: row },
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.NEGATIVE,
+                        borders: BorderStyles.NONE
+                    }),
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.NUM_0,
+                        borders: BorderStyles.LEFT
+                    }),
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: KeyConfigs.DECIMAL,
+                        borders: BorderStyles.LEFT
+                    }),
+                    React.createElement(TouchableKeypadButton, {
+                        keyConfig: dismissOrJumpOutKey,
+                        borders: BorderStyles.LEFT
+                    })
+                )
+            );
+        }
+    }]);
 
-const mapStateToProps = (state) => {
+    return FractionKeypad;
+}(React.Component);
+
+FractionKeypad.propTypes = {
+    cursorContext: cursorContextPropType.isRequired,
+    dynamicJumpOut: PropTypes.bool,
+    roundTopLeft: PropTypes.bool,
+    roundTopRight: PropTypes.bool
+};
+FractionKeypad.rows = 4;
+FractionKeypad.columns = 4;
+FractionKeypad.maxVisibleRows = 5;
+FractionKeypad.numPages = 1;
+
+
+var mapStateToProps = function mapStateToProps(state) {
     return {
         cursorContext: state.input.cursor.context,
-        dynamicJumpOut: !state.layout.navigationPadEnabled,
+        dynamicJumpOut: !state.layout.navigationPadEnabled
     };
 };
 

@@ -1,20 +1,37 @@
+'use strict';
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 /**
  * A high-level manager for our gesture system. In particular, this class
  * connects our various bits of logic for managing gestures and interactions,
  * and links them together.
  */
 
-const NodeManager = require('./node-manager');
-const PopoverStateMachine = require('./popover-state-machine');
-const GestureStateMachine = require('./gesture-state-machine');
+var NodeManager = require('./node-manager');
+var PopoverStateMachine = require('./popover-state-machine');
+var GestureStateMachine = require('./gesture-state-machine');
 
-const coordsForEvent = (evt) => {
+var coordsForEvent = function coordsForEvent(evt) {
     return [evt.changedTouches[0].clientX, evt.changedTouches[0].clientY];
 };
 
-class GestureManager {
-    constructor(options, handlers, disabledSwipeKeys, multiPressableKeys) {
-        const {swipeEnabled} = options;
+var GestureManager = function () {
+    function GestureManager(options, handlers, disabledSwipeKeys, multiPressableKeys) {
+        var _this = this;
+
+        _classCallCheck(this, GestureManager);
+
+        var swipeEnabled = options.swipeEnabled;
+
 
         this.swipeEnabled = swipeEnabled;
 
@@ -23,17 +40,17 @@ class GestureManager {
 
         this.nodeManager = new NodeManager();
         this.popoverStateMachine = new PopoverStateMachine({
-            onActiveNodesChanged: (activeNodes) => {
-                const {popover, ...rest} = activeNodes;
-                handlers.onActiveNodesChanged({
+            onActiveNodesChanged: function onActiveNodesChanged(activeNodes) {
+                var popover = activeNodes.popover,
+                    rest = _objectWithoutProperties(activeNodes, ['popover']);
+
+                handlers.onActiveNodesChanged(_extends({
                     popover: popover && {
                         parentId: popover.parentId,
-                        bounds: this.nodeManager.layoutPropsForId(
-                            popover.parentId).initialBounds,
-                        childKeyIds: popover.childIds,
-                    },
-                    ...rest,
-                });
+                        bounds: _this.nodeManager.layoutPropsForId(popover.parentId).initialBounds,
+                        childKeyIds: popover.childIds
+                    }
+                }, rest));
             },
             /**
              * `onClick` takes two arguments:
@@ -51,32 +68,28 @@ class GestureManager {
              * we need to mimic the effects of clicking on its 'primary' child
              * key, but animate the click on the popover button.
              */
-            onClick: (keyId, domNodeId, inPopover) => {
-                handlers.onClick(
-                    keyId,
-                    this.nodeManager.layoutPropsForId(domNodeId),
-                    inPopover
-                );
-            },
+            onClick: function onClick(keyId, domNodeId, inPopover) {
+                handlers.onClick(keyId, _this.nodeManager.layoutPropsForId(domNodeId), inPopover);
+            }
         });
         this.gestureStateMachine = new GestureStateMachine({
-            onFocus: (id) => {
-                this.popoverStateMachine.onFocus(id);
+            onFocus: function onFocus(id) {
+                _this.popoverStateMachine.onFocus(id);
             },
-            onLongPress: (id) => {
-                this.popoverStateMachine.onLongPress(id);
+            onLongPress: function onLongPress(id) {
+                _this.popoverStateMachine.onLongPress(id);
             },
-            onTouchEnd: (id) => {
-                this.popoverStateMachine.onTouchEnd(id);
+            onTouchEnd: function onTouchEnd(id) {
+                _this.popoverStateMachine.onTouchEnd(id);
             },
-            onBlur: () => {
-                this.popoverStateMachine.onBlur();
+            onBlur: function onBlur() {
+                _this.popoverStateMachine.onBlur();
             },
             onSwipeChange: handlers.onSwipeChange,
             onSwipeEnd: handlers.onSwipeEnd,
-            onTrigger: (id) => {
-                this.popoverStateMachine.onTrigger(id);
-            },
+            onTrigger: function onTrigger(id) {
+                _this.popoverStateMachine.onTrigger(id);
+            }
         }, {}, disabledSwipeKeys, multiPressableKeys);
     }
 
@@ -88,133 +101,169 @@ class GestureManager {
      * @param {string} id - the identifier of the DOM node in which the touch
      *                      occurred
      */
-    onTouchStart(evt, id) {
-        if (!this.trackEvents) {
-            return;
+
+
+    _createClass(GestureManager, [{
+        key: 'onTouchStart',
+        value: function onTouchStart(evt, id) {
+            if (!this.trackEvents) {
+                return;
+            }
+
+            var _coordsForEvent = coordsForEvent(evt),
+                _coordsForEvent2 = _slicedToArray(_coordsForEvent, 1),
+                x = _coordsForEvent2[0];
+
+            // TODO(charlie): It doesn't seem to be guaranteed that every touch
+            // event on `changedTouches` originates from the node through which this
+            // touch event was sent. In that case, we'd be inappropriately reporting
+            // the starting node ID.
+
+
+            for (var i = 0; i < evt.changedTouches.length; i++) {
+                this.gestureStateMachine.onTouchStart(function () {
+                    return id;
+                }, evt.changedTouches[i].identifier, x);
+            }
+
+            // If an event started in a view that we're managing, we'll handle it
+            // all the way through.
+            evt.preventDefault();
         }
 
-        const [x] = coordsForEvent(evt);
+        /**
+         * Handle a touch-move event that originated in a node registered with the
+         * gesture system.
+         *
+         * @param {TouchEvent} evt - the raw touch event from the browser
+         */
 
-        // TODO(charlie): It doesn't seem to be guaranteed that every touch
-        // event on `changedTouches` originates from the node through which this
-        // touch event was sent. In that case, we'd be inappropriately reporting
-        // the starting node ID.
-        for (let i = 0; i < evt.changedTouches.length; i++) {
-            this.gestureStateMachine.onTouchStart(
-                () => id,
-                evt.changedTouches[i].identifier,
-                x
-            );
+    }, {
+        key: 'onTouchMove',
+        value: function onTouchMove(evt) {
+            var _this2 = this;
+
+            if (!this.trackEvents) {
+                return;
+            }
+
+            var swipeLocked = this.popoverStateMachine.isPopoverVisible();
+            var swipeEnabled = this.swipeEnabled && !swipeLocked;
+
+            var _coordsForEvent3 = coordsForEvent(evt),
+                _coordsForEvent4 = _slicedToArray(_coordsForEvent3, 2),
+                x = _coordsForEvent4[0],
+                y = _coordsForEvent4[1];
+
+            for (var i = 0; i < evt.changedTouches.length; i++) {
+                this.gestureStateMachine.onTouchMove(function () {
+                    return _this2.nodeManager.idForCoords(x, y);
+                }, evt.changedTouches[i].identifier, x, swipeEnabled);
+            }
         }
 
-        // If an event started in a view that we're managing, we'll handle it
-        // all the way through.
-        evt.preventDefault();
-    }
+        /**
+         * Handle a touch-end event that originated in a node registered with the
+         * gesture system.
+         *
+         * @param {TouchEvent} evt - the raw touch event from the browser
+         */
 
-    /**
-     * Handle a touch-move event that originated in a node registered with the
-     * gesture system.
-     *
-     * @param {TouchEvent} evt - the raw touch event from the browser
-     */
-    onTouchMove(evt) {
-        if (!this.trackEvents) {
-            return;
+    }, {
+        key: 'onTouchEnd',
+        value: function onTouchEnd(evt) {
+            var _this3 = this;
+
+            if (!this.trackEvents) {
+                return;
+            }
+
+            var _coordsForEvent5 = coordsForEvent(evt),
+                _coordsForEvent6 = _slicedToArray(_coordsForEvent5, 2),
+                x = _coordsForEvent6[0],
+                y = _coordsForEvent6[1];
+
+            for (var i = 0; i < evt.changedTouches.length; i++) {
+                this.gestureStateMachine.onTouchEnd(function () {
+                    return _this3.nodeManager.idForCoords(x, y);
+                }, evt.changedTouches[i].identifier, x);
+            }
         }
 
-        const swipeLocked = this.popoverStateMachine.isPopoverVisible();
-        const swipeEnabled = this.swipeEnabled && !swipeLocked;
-        const [x, y] = coordsForEvent(evt);
-        for (let i = 0; i < evt.changedTouches.length; i++) {
-            this.gestureStateMachine.onTouchMove(
-                () => this.nodeManager.idForCoords(x, y),
-                evt.changedTouches[i].identifier,
-                x,
-                swipeEnabled
-            );
-        }
-    }
+        /**
+         * Handle a touch-cancel event that originated in a node registered with the
+         * gesture system.
+         *
+         * @param {TouchEvent} evt - the raw touch event from the browser
+         */
 
-    /**
-     * Handle a touch-end event that originated in a node registered with the
-     * gesture system.
-     *
-     * @param {TouchEvent} evt - the raw touch event from the browser
-     */
-    onTouchEnd(evt) {
-        if (!this.trackEvents) {
-            return;
+    }, {
+        key: 'onTouchCancel',
+        value: function onTouchCancel(evt) {
+            if (!this.trackEvents) {
+                return;
+            }
+
+            for (var i = 0; i < evt.changedTouches.length; i++) {
+                this.gestureStateMachine.onTouchCancel(evt.changedTouches[i].identifier);
+            }
         }
 
-        const [x, y] = coordsForEvent(evt);
-        for (let i = 0; i < evt.changedTouches.length; i++) {
-            this.gestureStateMachine.onTouchEnd(
-                () => this.nodeManager.idForCoords(x, y),
-                evt.changedTouches[i].identifier,
-                x
-            );
-        }
-    }
+        /**
+         * Register a DOM node with a given identifier.
+         *
+         * @param {string} id - the identifier of the given node
+         * @param {node} domNode - the DOM node linked to the identifier
+         * @param {string[]} childIds - the identifiers of any DOM nodes that
+         *                              should be considered children of this node,
+         *                              in that they should take priority when
+         *                              intercepting touch events
+         * @param {object} borders - an opaque object describing the node's borders
+         */
 
-    /**
-     * Handle a touch-cancel event that originated in a node registered with the
-     * gesture system.
-     *
-     * @param {TouchEvent} evt - the raw touch event from the browser
-     */
-    onTouchCancel(evt) {
-        if (!this.trackEvents) {
-            return;
+    }, {
+        key: 'registerDOMNode',
+        value: function registerDOMNode(id, domNode, childIds, borders) {
+            this.nodeManager.registerDOMNode(id, domNode, childIds, borders);
+            this.popoverStateMachine.registerPopover(id, childIds);
         }
 
-        for (let i = 0; i < evt.changedTouches.length; i++) {
-            this.gestureStateMachine.onTouchCancel(
-                evt.changedTouches[i].identifier
-            );
+        /**
+         * Unregister the DOM node with the given identifier.
+         *
+         * @param {string} id - the identifier of the node to unregister
+         */
+
+    }, {
+        key: 'unregisterDOMNode',
+        value: function unregisterDOMNode(id) {
+            this.nodeManager.unregisterDOMNode(id);
+            this.popoverStateMachine.unregisterPopover(id);
         }
-    }
 
-    /**
-     * Register a DOM node with a given identifier.
-     *
-     * @param {string} id - the identifier of the given node
-     * @param {node} domNode - the DOM node linked to the identifier
-     * @param {string[]} childIds - the identifiers of any DOM nodes that
-     *                              should be considered children of this node,
-     *                              in that they should take priority when
-     *                              intercepting touch events
-     * @param {object} borders - an opaque object describing the node's borders
-     */
-    registerDOMNode(id, domNode, childIds, borders) {
-        this.nodeManager.registerDOMNode(id, domNode, childIds, borders);
-        this.popoverStateMachine.registerPopover(id, childIds);
-    }
+        /**
+         * Enable event tracking for the gesture manager.
+         */
 
-    /**
-     * Unregister the DOM node with the given identifier.
-     *
-     * @param {string} id - the identifier of the node to unregister
-     */
-    unregisterDOMNode(id) {
-        this.nodeManager.unregisterDOMNode(id);
-        this.popoverStateMachine.unregisterPopover(id);
-    }
+    }, {
+        key: 'enableEventTracking',
+        value: function enableEventTracking() {
+            this.trackEvents = true;
+        }
 
-    /**
-     * Enable event tracking for the gesture manager.
-     */
-    enableEventTracking() {
-        this.trackEvents = true;
-    }
+        /**
+         * Disable event tracking for the gesture manager. When called, the gesture
+         * manager will drop any events received by managed nodes.
+         */
 
-    /**
-     * Disable event tracking for the gesture manager. When called, the gesture
-     * manager will drop any events received by managed nodes.
-     */
-    disableEventTracking() {
-        this.trackEvents = false;
-    }
-}
+    }, {
+        key: 'disableEventTracking',
+        value: function disableEventTracking() {
+            this.trackEvents = false;
+        }
+    }]);
+
+    return GestureManager;
+}();
 
 module.exports = GestureManager;

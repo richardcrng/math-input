@@ -1,6 +1,8 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
+'use strict';
 
-const App = require('./components/app');
+var React = require('react');
+var ReactDOM = require('react-dom');
 
-ReactDOM.render(<App />, document.getElementById('root'));
+var App = require('./components/app');
+
+ReactDOM.render(React.createElement(App, null), document.getElementById('root'));

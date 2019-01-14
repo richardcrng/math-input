@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Constants that are shared between multiple files.
  */
@@ -5,7 +7,7 @@
 module.exports = {
     KeypadTypes: {
         FRACTION: 'FRACTION',
-        EXPRESSION: 'EXPRESSION',
+        EXPRESSION: 'EXPRESSION'
     },
 
     KeyTypes: {
@@ -25,49 +27,49 @@ module.exports = {
         // themselves.
         MANY: 'MANY',
         // For the echo animation that appears on press.
-        ECHO: 'ECHO',
+        ECHO: 'ECHO'
     },
 
     DeviceOrientations: {
         LANDSCAPE: 'LANDSCAPE',
-        PORTRAIT: 'PORTRAIT',
+        PORTRAIT: 'PORTRAIT'
     },
 
     DeviceTypes: {
         PHONE: 'PHONE',
-        TABLET: 'TABLET',
+        TABLET: 'TABLET'
     },
 
     LayoutModes: {
         FULLSCREEN: 'FULLSCREEN',
-        COMPACT: 'COMPACT',
+        COMPACT: 'COMPACT'
     },
 
     BorderDirections: {
         LEFT: 'LEFT',
-        BOTTOM: 'BOTTOM',
+        BOTTOM: 'BOTTOM'
     },
     BorderStyles: {
         LEFT: ['LEFT'],
         BOTTOM: ['BOTTOM'],
         ALL: ['LEFT', 'BOTTOM'],
-        NONE: [],
+        NONE: []
     },
 
     IconTypes: {
         MATH: 'MATH',
         SVG: 'SVG',
-        TEXT: 'TEXT',
+        TEXT: 'TEXT'
     },
 
     DecimalSeparators: {
         COMMA: 'COMMA',
-        PERIOD: 'PERIOD',
+        PERIOD: 'PERIOD'
     },
 
     EchoAnimationTypes: {
         SLIDE_AND_FADE: 'SLIDE_AND_FADE',
         FADE_ONLY: 'FADE_ONLY',
-        LONG_FADE_ONLY: 'LONG_FADE_ONLY',
-    },
+        LONG_FADE_ONLY: 'LONG_FADE_ONLY'
+    }
 };

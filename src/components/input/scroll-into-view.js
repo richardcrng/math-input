@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * A single function used to scroll a DOM node into view, optionally taking into
  * account that it may be obscured by the custom keypad. The logic makes the
@@ -9,9 +11,12 @@
  * level in the component tree--perhaps even into webapp, beyond Perseus.
  */
 
-const {toolbarHeightPx} = require('../common-style');
+var _require = require('../common-style'),
+    toolbarHeightPx = _require.toolbarHeightPx;
 
 // Taken from https://dev.opera.com/articles/fixing-the-scrolltop-bug/
+
+
 function bodyOrHtml() {
     if ('scrollingElement' in document) {
         return document.scrollingElement;
@@ -23,18 +28,18 @@ function bodyOrHtml() {
     return document.documentElement;
 }
 
-const scrollIntoView = (containerNode, keypadNode) => {
+var scrollIntoView = function scrollIntoView(containerNode, keypadNode) {
     // TODO(charlie): There's no need for us to be reading the keypad bounds
     // here, since they're pre-determined by logic in the store. We should
     // instead pass around an object that knows the bounds.
-    const containerBounds = containerNode.getBoundingClientRect();
-    const containerBottomPx = containerBounds.bottom;
-    const containerTopPx = containerBounds.top;
+    var containerBounds = containerNode.getBoundingClientRect();
+    var containerBottomPx = containerBounds.bottom;
+    var containerTopPx = containerBounds.top;
 
     // Get the element that scrolls the document.
-    const scrollNode = bodyOrHtml();
+    var scrollNode = bodyOrHtml();
 
-    const desiredMarginPx = 16;
+    var desiredMarginPx = 16;
 
     if (keypadNode) {
         // NOTE(charlie): We can't use the bounding rect of the keypad,
@@ -45,18 +50,15 @@ const scrollIntoView = (containerNode, keypadNode) => {
         // in the native apps (where the toolbar is rendered natively), this
         // will result in us leaving excess space between the input and the
         // keypad, but that seems okay.
-        const pageHeightPx = window.innerHeight;
-        const keypadHeightPx = keypadNode.clientHeight;
-        const keypadTopPx = pageHeightPx - (keypadHeightPx + toolbarHeightPx);
+        var pageHeightPx = window.innerHeight;
+        var keypadHeightPx = keypadNode.clientHeight;
+        var keypadTopPx = pageHeightPx - (keypadHeightPx + toolbarHeightPx);
 
         if (containerBottomPx > keypadTopPx) {
             // If the input would be obscured by the keypad, scroll such that
             // the bottom of the input is just above the top of the keypad,
             // taking care not to scroll the input out of view.
-            const scrollOffset = Math.min(
-                containerBottomPx - keypadTopPx + desiredMarginPx,
-                containerTopPx
-            );
+            var scrollOffset = Math.min(containerBottomPx - keypadTopPx + desiredMarginPx, containerTopPx);
 
             scrollNode.scrollTop += scrollOffset;
             return;

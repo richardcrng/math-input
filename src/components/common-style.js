@@ -1,8 +1,10 @@
+'use strict';
+
 /**
  * Common parameters used to style components.
  */
 
-const gray85 = '#D6D8DA';
+var gray85 = '#D6D8DA';
 
 module.exports = {
     brightGreen: '#78C008',
@@ -10,7 +12,7 @@ module.exports = {
     gray25: '#3B3E40',
     gray68: '#888D93',
     gray76: '#BABEC2',
-    gray85,
+    gray85: gray85,
     iconSizeHeightPx: 48,
     iconSizeWidthPx: 48,
     compactKeypadBorderRadiusPx: 4,
@@ -24,9 +26,9 @@ module.exports = {
 
     // Keypad button colors
     valueGrey: '#FFF',
-    operatorGrey : '#FAFAFA',
-    controlGrey : '#F6F7F7',
-    emptyGrey : '#F0F1F2',
+    operatorGrey: '#FAFAFA',
+    controlGrey: '#F6F7F7',
+    emptyGrey: '#F0F1F2',
 
     // Constants defining any borders between elements in the keypad.
     innerBorderColor: gray85,
@@ -45,5 +47,5 @@ module.exports = {
     // HACK(charlie): This should be injected by webapp somehow.
     // TODO(charlie): Add a link to the webapp location as soon as the footer
     // has settled down.
-    toolbarHeightPx: 60,
+    toolbarHeightPx: 60
 };

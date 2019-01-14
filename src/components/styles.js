@@ -1,38 +1,42 @@
+'use strict';
+
 /**
  * Common styles shared across components.
  */
 
-const {StyleSheet} = require('aphrodite');
+var _require = require('aphrodite'),
+    StyleSheet = _require.StyleSheet;
 
-const {compactKeypadBorderRadiusPx} = require('./common-style');
+var _require2 = require('./common-style'),
+    compactKeypadBorderRadiusPx = _require2.compactKeypadBorderRadiusPx;
 
 module.exports = StyleSheet.create({
     row: {
-        flexDirection: 'row',
+        flexDirection: 'row'
     },
     column: {
-        flexDirection: 'column',
+        flexDirection: 'column'
     },
     oneColumn: {
-        flexGrow: 1,
+        flexGrow: 1
     },
     fullWidth: {
-        width: '100%',
+        width: '100%'
     },
     stretch: {
-        alignItems: 'stretch',
+        alignItems: 'stretch'
     },
     centered: {
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     centeredText: {
-        textAlign: 'center',
+        textAlign: 'center'
     },
     roundedTopLeft: {
-        borderTopLeftRadius: compactKeypadBorderRadiusPx,
+        borderTopLeftRadius: compactKeypadBorderRadiusPx
     },
     roundedTopRight: {
-        borderTopRightRadius: compactKeypadBorderRadiusPx,
-    },
+        borderTopRightRadius: compactKeypadBorderRadiusPx
+    }
 });
