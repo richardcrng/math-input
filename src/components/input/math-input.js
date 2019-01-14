@@ -21,24 +21,24 @@ const i18n = window.i18n || {_: s => s};
 const constrainingFrictionFactor = 0.8;
 
 class MathInput extends React.Component {
-    static propTypes = {
-        // The React element node associated with the keypad that will send
-        // key-press events to this input. If provided, this can be used to:
-        //   (1) Avoid blurring the input, on user interaction with the keypad.
-        //   (2) Scroll the input into view, if it would otherwise be obscured
-        //       by the keypad on focus.
-        keypadElement: keypadElementPropType,
-        onBlur: PropTypes.func,
-        onChange: PropTypes.func.isRequired,
-        onFocus: PropTypes.func,
-        // Whether the input should be scrollable. This is typically only
-        // necessary when a fixed width has been provided through the `style`
-        // prop.
-        scrollable: PropTypes.bool,
-        // An extra, vanilla style object, to be applied to the math input.
-        style: PropTypes.any,
-        value: PropTypes.string,
-    };
+    // static propTypes = {
+    //     // The React element node associated with the keypad that will send
+    //     // key-press events to this input. If provided, this can be used to:
+    //     //   (1) Avoid blurring the input, on user interaction with the keypad.
+    //     //   (2) Scroll the input into view, if it would otherwise be obscured
+    //     //       by the keypad on focus.
+    //     keypadElement: keypadElementPropType,
+    //     onBlur: PropTypes.func,
+    //     onChange: PropTypes.func.isRequired,
+    //     onFocus: PropTypes.func,
+    //     // Whether the input should be scrollable. This is typically only
+    //     // necessary when a fixed width has been provided through the `style`
+    //     // prop.
+    //     scrollable: PropTypes.bool,
+    //     // An extra, vanilla style object, to be applied to the math input.
+    //     style: PropTypes.any,
+    //     value: PropTypes.string,
+    // };
 
     static defaultProps = {
         scrollable: false,
