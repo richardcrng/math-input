@@ -263,7 +263,7 @@ class MathInput extends React.Component {
         this.setState({focused: false, handle: {visible: false}});
     };
 
-    static blurInIsolation = () => {
+    blurInIsolation = () => {
         this.mathField.blur();
         // this.props.onBlur && this.props.onBlur();
         this.setState({focused: false, handle: {visible: false}});

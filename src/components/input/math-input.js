@@ -109,6 +109,10 @@ var MathInput = function (_React$Component) {
             _this.mathField.blur();
             _this.props.onBlur && _this.props.onBlur();
             _this.setState({ focused: false, handle: { visible: false } });
+        }, _this.blurInIsolation = function () {
+            _this.mathField.blur();
+            // this.props.onBlur && this.props.onBlur();
+            _this.setState({ focused: false, handle: { visible: false } });
         }, _this.focus = function () {
             // Pass this component's handleKey method to the keypad so it can call
             // it whenever it needs to trigger a keypress action.
