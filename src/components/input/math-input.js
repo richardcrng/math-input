@@ -365,8 +365,10 @@ var MathInput = function (_React$Component) {
 
                 // Make the cursor visible and set the handle-less cursor's
                 // location.
-                var touch = e.changedTouches[0];
-                _this._insertCursorAtClosestNode(touch.clientX, touch.clientY);
+                if (e.changedTouches) {
+                    var touch = e.changedTouches[0];
+                    _this._insertCursorAtClosestNode(touch.clientX, touch.clientY);
+                }
             }
 
             // Trigger a focus event, if we're not already focused.
