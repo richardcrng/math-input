@@ -4,10 +4,11 @@
  * from MathQuill changes.
  */
 
+import fMathQuill from '../../utils/utilsMathquill';
+
 const $ = require('jquery');
 // Keeping `window` in place for test suite and GitHub Pages.
 // If it does not exist, fall back to CommonJS require. - jsatk
-const MathQuill = require('exports-loader?window.MathQuill!imports-loader?window.jQuery=jquery!mathquill/build/mathquill.js');
 
 const Keys = require('../../data/keys');
 const CursorContexts = require('./cursor-contexts');
@@ -92,15 +93,17 @@ const KeysForJumpContext = {
 class MathWrapper {
 
     constructor(element, options = {}, callbacks = {}) {
-        this.MQ = MathQuill.getInterface(2);
-        this.mathField = this.MQ.MathField(element, {
+        fMathQuill.whenLoaded(() => {
+          this.MQ = MathQuill.getInterface(2);
+          this.mathField = this.MQ.MathField(element, {
             // use a span instead of a textarea so that we don't bring up the
             // native keyboard on mobile when selecting the input
-            substituteTextarea: function() {
-                return document.createElement('span');
+            substituteTextarea: function () {
+              return document.createElement('span');
             },
-        });
-        this.callbacks = callbacks;
+          });
+          this.callbacks = callbacks;
+        }, 100)
     }
 
     focus() {
