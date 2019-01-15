@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Constants that define the various contexts in which a cursor can exist. The
  * active context is determined first by looking at the cursor's siblings (e.g.,
@@ -27,5 +29,5 @@ module.exports = {
     // what looks to be a mixed number preceding a fraction. This will only be
     // the case when the only math between the cursor and the fraction to its
     // write is non-leaf math (numbers and variables).
-    BEFORE_FRACTION: 'BEFORE_FRACTION',
+    BEFORE_FRACTION: 'BEFORE_FRACTION'
 };

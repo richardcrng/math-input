@@ -1,23 +1,27 @@
+'use strict';
+
 /**
  * A single entry-point for all of the external-facing functionality.
  */
 
-const components = {
+var components = {
     Keypad: require('./components/provided-keypad'),
-    KeypadInput: require('./components/input/math-input'),
+    KeypadInput: require('./components/input/math-input')
 };
 
-const {KeypadTypes} = require('./consts');
-const consts = {KeypadTypes};
+var _require = require('./consts'),
+    KeypadTypes = _require.KeypadTypes;
 
-const {
-    keypadConfigurationPropType,
-    keypadElementPropType,
-} = require('./components/prop-types');
-const propTypes = {keypadConfigurationPropType, keypadElementPropType};
+var consts = { KeypadTypes: KeypadTypes };
+
+var _require2 = require('./components/prop-types'),
+    keypadConfigurationPropType = _require2.keypadConfigurationPropType,
+    keypadElementPropType = _require2.keypadElementPropType;
+
+var propTypes = { keypadConfigurationPropType: keypadConfigurationPropType, keypadElementPropType: keypadElementPropType };
 
 module.exports = {
-    components,
-    consts,
-    propTypes,
+    components: components,
+    consts: consts,
+    propTypes: propTypes
 };

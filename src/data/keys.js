@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * This file contains constants for keypad buttons that aren't single
  * alphanumeric characters.
@@ -6,7 +8,7 @@
 // TODO(charlie): There's duplication between this file and key-configs.js.
 // We should clean it up by removing this file and requiring clients to use the
 // `id` field on the key configurations.
-const Keys = {
+var Keys = {
     PLUS: 'PLUS',
     MINUS: 'MINUS',
     NEGATIVE: 'NEGATIVE',
@@ -60,7 +62,7 @@ const Keys = {
 
     // A custom key that captures an arbitrary number of symbols but has no
     // 'default' symbol or action.
-    MANY: 'MANY',
+    MANY: 'MANY'
 };
 
 module.exports = Keys;

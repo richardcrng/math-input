@@ -1,58 +1,58 @@
+'use strict';
+
 module.exports = {
     // naming convetion: verb + noun
     // the noun should be one of the other properties in the object that's
     // being dispatched
-    dismissKeypad() {
+    dismissKeypad: function dismissKeypad() {
         return {
-            type: 'DismissKeypad',
+            type: 'DismissKeypad'
+        };
+    },
+    activateKeypad: function activateKeypad() {
+        return {
+            type: 'ActivateKeypad'
         };
     },
 
-    activateKeypad() {
-        return {
-            type: 'ActivateKeypad',
-        };
-    },
 
     /**
      * Configure the keypad with the provided configuration parameters.
      *
      * See: `prop-types.js#keypadConfigurationPropType`.
      */
-    configureKeypad(configuration) {
+    configureKeypad: function configureKeypad(configuration) {
         return {
             type: 'ConfigureKeypad',
-            configuration,
+            configuration: configuration
         };
     },
-
-    setPageSize(pageWidthPx, pageHeightPx) {
+    setPageSize: function setPageSize(pageWidthPx, pageHeightPx) {
         return {
             type: 'SetPageSize',
-            pageWidthPx,
-            pageHeightPx,
+            pageWidthPx: pageWidthPx,
+            pageHeightPx: pageHeightPx
         };
     },
-
-    removeEcho(animationId) {
+    removeEcho: function removeEcho(animationId) {
         return {
             type: 'RemoveEcho',
-            animationId,
+            animationId: animationId
         };
     },
+
 
     // Input-related actions.
-    setKeyHandler(keyHandler) {
+    setKeyHandler: function setKeyHandler(keyHandler) {
         return {
             type: 'SetKeyHandler',
-            keyHandler,
+            keyHandler: keyHandler
         };
     },
-
-    setCursor(cursor) {
+    setCursor: function setCursor(cursor) {
         return {
             type: 'SetCursor',
-            cursor,
+            cursor: cursor
         };
-    },
+    }
 };

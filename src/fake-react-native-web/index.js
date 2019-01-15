@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * This file exports components View and Text which wrap <div> and <span>.
  * We do this so that someday in the future we can use these components with
@@ -8,6 +10,6 @@
  */
 
 module.exports = {
-    Text: require('./text'),
-    View: require('./view'),
+  Text: require('./text'),
+  View: require('./view')
 };

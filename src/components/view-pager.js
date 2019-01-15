@@ -1,3 +1,15 @@
+'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 /**
  * A view pager that allows for pagination in the horizontal direction.
  * Right now, there are a number of limitations built into the system. Namely:
@@ -5,95 +17,132 @@
  *  - It supports exactly two pages.
  */
 
-const React = require('react');
-const PropTypes = require('prop-types');
-const {connect} = require('react-redux');
-const {StyleSheet} = require('aphrodite');
+var React = require('react');
+var PropTypes = require('prop-types');
 
-const {View} = require('../fake-react-native-web');
-const {row} = require('./styles');
-const {childrenPropType} = require('./prop-types');
-const {
-    innerBorderColor,
-    innerBorderStyle,
-    innerBorderWidthPx,
-} = require('./common-style');
+var _require = require('react-redux'),
+    connect = _require.connect;
 
-class ViewPager extends React.Component {
-    static propTypes = {
-        // Whether the page should animate to its next specified position.
-        animateToPosition: PropTypes.bool,
-        children: childrenPropType,
-        pageWidthPx: PropTypes.number.isRequired,
-        translateX: PropTypes.number.isRequired,
-    };
+var _require2 = require('aphrodite'),
+    StyleSheet = _require2.StyleSheet;
 
-    state = {
-        animationDurationMs: 0,
-    };
+var _require3 = require('../fake-react-native-web'),
+    View = _require3.View;
 
-    componentWillReceiveProps(newProps) {
-        // Compute the appropriate animation length, if the pager should
-        // animate to its next position.
-        let animationDurationMs;
-        if (newProps.animateToPosition) {
-            const finalTranslateX = newProps.translateX;
-            const prevTranslateX = this.props.translateX;
+var _require4 = require('./styles'),
+    row = _require4.row;
 
-            // We animate at a rate of 1 pixel per millisecond, and thus we can
-            // use the displacement as the animation duration.
-            animationDurationMs = Math.abs(finalTranslateX - prevTranslateX);
-        } else {
-            animationDurationMs = 0;
+var _require5 = require('./prop-types'),
+    childrenPropType = _require5.childrenPropType;
+
+var _require6 = require('./common-style'),
+    innerBorderColor = _require6.innerBorderColor,
+    innerBorderStyle = _require6.innerBorderStyle,
+    innerBorderWidthPx = _require6.innerBorderWidthPx;
+
+var ViewPager = function (_React$Component) {
+    _inherits(ViewPager, _React$Component);
+
+    function ViewPager() {
+        var _ref;
+
+        var _temp, _this, _ret;
+
+        _classCallCheck(this, ViewPager);
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
         }
-        this.setState({
-            animationDurationMs,
-        });
+
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ViewPager.__proto__ || Object.getPrototypeOf(ViewPager)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+            animationDurationMs: 0
+        }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
-    render() {
-        const {children, pageWidthPx, translateX} = this.props;
-        const {animationDurationMs} = this.state;
+    _createClass(ViewPager, [{
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(newProps) {
+            // Compute the appropriate animation length, if the pager should
+            // animate to its next position.
+            var animationDurationMs = void 0;
+            if (newProps.animateToPosition) {
+                var finalTranslateX = newProps.translateX;
+                var prevTranslateX = this.props.translateX;
 
-        const pagerStyle = [row, styles.twoPagePager];
+                // We animate at a rate of 1 pixel per millisecond, and thus we can
+                // use the displacement as the animation duration.
+                animationDurationMs = Math.abs(finalTranslateX - prevTranslateX);
+            } else {
+                animationDurationMs = 0;
+            }
+            this.setState({
+                animationDurationMs: animationDurationMs
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _props = this.props,
+                children = _props.children,
+                pageWidthPx = _props.pageWidthPx,
+                translateX = _props.translateX;
+            var animationDurationMs = this.state.animationDurationMs;
 
-        const transform = {
-            msTransform: `translate3d(${translateX}px, 0, 0)`,
-            WebkitTransform: `translate3d(${translateX}px, 0, 0)`,
-            transform: `translate3d(${translateX}px, 0, 0)`,
-        };
-        const animate = animationDurationMs ? {
-            msTransitionProperty: 'transform',
-            WebkitTransitionProperty: 'transform',
-            transitionProperty: 'transform',
-            msTransitionDuration: `${animationDurationMs}ms`,
-            WebkitTransitionDuration: `${animationDurationMs}ms`,
-            transitionDuration: `${animationDurationMs}ms`,
-            msTransitionTimingFunction: 'ease-out',
-            WebkitTransitionTimingFunction: 'ease-out',
-            transitionTimingFunction: 'ease-out',
-        } : {};
-        const dynamicPagerStyle = {
-            ...transform,
-            ...animate,
-        };
 
-        const dynamicPageStyle = {
-            width: pageWidthPx,
-        };
+            var pagerStyle = [row, styles.twoPagePager];
 
-        return <View style={pagerStyle} dynamicStyle={dynamicPagerStyle}>
-            <View dynamicStyle={dynamicPageStyle}>
-                {children[0]}
-            </View>
-            <View style={styles.rightPage} dynamicStyle={dynamicPageStyle}>
-                {children[1]}
-            </View>
-        </View>;
-    }
-}
+            var transform = {
+                msTransform: 'translate3d(' + translateX + 'px, 0, 0)',
+                WebkitTransform: 'translate3d(' + translateX + 'px, 0, 0)',
+                transform: 'translate3d(' + translateX + 'px, 0, 0)'
+            };
+            var animate = animationDurationMs ? {
+                msTransitionProperty: 'transform',
+                WebkitTransitionProperty: 'transform',
+                transitionProperty: 'transform',
+                msTransitionDuration: animationDurationMs + 'ms',
+                WebkitTransitionDuration: animationDurationMs + 'ms',
+                transitionDuration: animationDurationMs + 'ms',
+                msTransitionTimingFunction: 'ease-out',
+                WebkitTransitionTimingFunction: 'ease-out',
+                transitionTimingFunction: 'ease-out'
+            } : {};
+            var dynamicPagerStyle = _extends({}, transform, animate);
 
-const styles = StyleSheet.create({
+            var dynamicPageStyle = {
+                width: pageWidthPx
+            };
+
+            return React.createElement(
+                View,
+                { style: pagerStyle, dynamicStyle: dynamicPagerStyle },
+                React.createElement(
+                    View,
+                    { dynamicStyle: dynamicPageStyle },
+                    children[0]
+                ),
+                React.createElement(
+                    View,
+                    { style: styles.rightPage, dynamicStyle: dynamicPageStyle },
+                    children[1]
+                )
+            );
+        }
+    }]);
+
+    return ViewPager;
+}(React.Component);
+
+ViewPager.propTypes = {
+    // Whether the page should animate to its next specified position.
+    animateToPosition: PropTypes.bool,
+    children: childrenPropType,
+    pageWidthPx: PropTypes.number.isRequired,
+    translateX: PropTypes.number.isRequired
+};
+
+
+var styles = StyleSheet.create({
     twoPagePager: {
         alignSelf: 'flex-start',
         // Note: By default, <View> sets a `maxWidth` of 100% to fix some
@@ -101,22 +150,26 @@ const styles = StyleSheet.create({
         // pages. The exact value here isn't super important, as long as it's
         // large enough to accommodate for two pages (so, 200%) and some
         // separators.
-        maxWidth: '250%',
+        maxWidth: '250%'
     },
 
     rightPage: {
-        borderLeft: `${innerBorderWidthPx}px ${innerBorderStyle} `
-            + `${innerBorderColor}`,
-        boxSizing: 'content-box',
-    },
+        borderLeft: innerBorderWidthPx + 'px ' + innerBorderStyle + ' ' + ('' + innerBorderColor),
+        boxSizing: 'content-box'
+    }
 });
 
-const mapStateToProps = (state) => {
-    const {animateToPosition, currentPage, dx, pageWidthPx} = state.pager;
+var mapStateToProps = function mapStateToProps(state) {
+    var _state$pager = state.pager,
+        animateToPosition = _state$pager.animateToPosition,
+        currentPage = _state$pager.currentPage,
+        dx = _state$pager.dx,
+        pageWidthPx = _state$pager.pageWidthPx;
+
     return {
-        animateToPosition,
-        pageWidthPx,
-        translateX: -currentPage * (pageWidthPx + innerBorderWidthPx) + dx,
+        animateToPosition: animateToPosition,
+        pageWidthPx: pageWidthPx,
+        translateX: -currentPage * (pageWidthPx + innerBorderWidthPx) + dx
     };
 };
 
