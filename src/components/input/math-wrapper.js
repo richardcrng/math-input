@@ -19,7 +19,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var $ = require('jquery');
 // Keeping `window` in place for test suite and GitHub Pages.
 // If it does not exist, fall back to CommonJS require. - jsatk
-var MathQuill = window.MathQuill || require('mathquill');
+var MathQuill = require('exports-loader?window.MathQuill!imports-loader?window.jQuery=jquery!mathquill/build/mathquill.js');
 
 var Keys = require('../../data/keys');
 var CursorContexts = require('./cursor-contexts');
