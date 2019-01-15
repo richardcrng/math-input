@@ -728,7 +728,8 @@ var MathInput = function (_React$Component) {
                     onTouchMove: this.handleTouchMove,
                     onTouchEnd: this.handleTouchEnd,
                     onClick: function onClick(e) {
-                        return e.stopPropagation();
+                        _this3.handleTouchStart(e);
+                        _this3.handleTouchEnd(e);
                     },
                     role: 'textbox',
                     ariaLabel: i18n._('Math input box')
