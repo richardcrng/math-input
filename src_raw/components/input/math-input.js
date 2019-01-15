@@ -704,7 +704,10 @@ class MathInput extends React.Component {
             onTouchStart={this.handleTouchStart}
             onTouchMove={this.handleTouchMove}
             onTouchEnd={this.handleTouchEnd}
-            onClick={e => e.stopPropagation()}
+            onClick={e => {
+              this.handleTouchStart(e);
+              this.handleTouchEnd(e);
+            }}
             role={'textbox'}
             ariaLabel={i18n._('Math input box')}
         >
