@@ -4,22 +4,25 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _KeyActions, _NormalCommands, _KeysForJumpContext;
 
+var _utilsMathquill = require('../../utils/utilsMathquill');
+
+var _utilsMathquill2 = _interopRequireDefault(_utilsMathquill);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-/**
- * This file contains a wrapper around MathQuill so that we can provide a
- * more regular interface for the functionality we need while insulating us
- * from MathQuill changes.
- */
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; } /**
+                                                                                                                                                                                                                   * This file contains a wrapper around MathQuill so that we can provide a
+                                                                                                                                                                                                                   * more regular interface for the functionality we need while insulating us
+                                                                                                                                                                                                                   * from MathQuill changes.
+                                                                                                                                                                                                                   */
 
 var $ = require('jquery');
 // Keeping `window` in place for test suite and GitHub Pages.
 // If it does not exist, fall back to CommonJS require. - jsatk
-var MathQuill = require('exports-loader?window.MathQuill!imports-loader?window.jQuery=jquery!mathquill/build/mathquill.js');
 
 var Keys = require('../../data/keys');
 var CursorContexts = require('./cursor-contexts');
@@ -67,20 +70,24 @@ var KeysForJumpContext = (_KeysForJumpContext = {}, _defineProperty(_KeysForJump
 
 var MathWrapper = function () {
     function MathWrapper(element) {
+        var _this = this;
+
         var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var callbacks = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
         _classCallCheck(this, MathWrapper);
 
-        this.MQ = MathQuill.getInterface(2);
-        this.mathField = this.MQ.MathField(element, {
-            // use a span instead of a textarea so that we don't bring up the
-            // native keyboard on mobile when selecting the input
-            substituteTextarea: function substituteTextarea() {
-                return document.createElement('span');
-            }
-        });
-        this.callbacks = callbacks;
+        _utilsMathquill2.default.whenLoaded(function () {
+            _this.MQ = MathQuill.getInterface(2);
+            _this.mathField = _this.MQ.MathField(element, {
+                // use a span instead of a textarea so that we don't bring up the
+                // native keyboard on mobile when selecting the input
+                substituteTextarea: function substituteTextarea() {
+                    return document.createElement('span');
+                }
+            });
+            _this.callbacks = callbacks;
+        }, 100);
     }
 
     _createClass(MathWrapper, [{
