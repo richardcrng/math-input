@@ -255,15 +255,21 @@ class MathInput extends React.Component {
                 y: 0,
             },
         });
-    };
+    }
 
-    static blur = () => {
+    blur = () => {
         this.mathField.blur();
         this.props.onBlur && this.props.onBlur();
         this.setState({focused: false, handle: {visible: false}});
     };
 
-    static focus = () => {
+    blurInIsolation = () => {
+        this.mathField.blur();
+        // this.props.onBlur && this.props.onBlur();
+        this.setState({focused: false, handle: {visible: false}});
+    };
+
+    focus = () => {
         // Pass this component's handleKey method to the keypad so it can call
         // it whenever it needs to trigger a keypress action.
         this.props.keypadElement.setKeyHandler(key => {
