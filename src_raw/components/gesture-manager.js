@@ -9,7 +9,11 @@ const PopoverStateMachine = require('./popover-state-machine');
 const GestureStateMachine = require('./gesture-state-machine');
 
 const coordsForEvent = (evt) => {
-    return [evt.changedTouches[0].clientX, evt.changedTouches[0].clientY];
+    if (evt.changedTouches) {
+      return [evt.changedTouches[0].clientX, evt.changedTouches[0].clientY];
+    } else {
+      return [evt.clientX, evt.clientY]
+    }
 };
 
 class GestureManager {
@@ -99,7 +103,7 @@ class GestureManager {
         // event on `changedTouches` originates from the node through which this
         // touch event was sent. In that case, we'd be inappropriately reporting
         // the starting node ID.
-        if ('ontouchstart' in window) {
+        if (evt.changedTouches) {
           for (let i = 0; i < evt.changedTouches.length; i++) {
             this.gestureStateMachine.onTouchStart(
               () => id,
@@ -158,7 +162,7 @@ class GestureManager {
 
         const [x, y] = coordsForEvent(evt);
         
-        if ('ontouchstart' in window) {
+        if (evt.changedTouches) {
           for (let i = 0; i < evt.changedTouches.length; i++) {
             this.gestureStateMachine.onTouchEnd(
               () => this.nodeManager.idForCoords(x, y),
