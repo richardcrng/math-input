@@ -598,6 +598,12 @@ class MathInput extends React.Component {
         this._containerBounds = this._container.getBoundingClientRect();
     };
 
+    onCursorHandleMouseDown = (e) => {
+      if (!('ontouchstart' in window)) {
+        this.onCursorHandleTouchStart(e)
+      }
+    }
+
     _constrainToBound = (value, min, max, friction) => {
         if (value < min) {
             return min + (value - min) * friction;
@@ -617,8 +623,15 @@ class MathInput extends React.Component {
     onCursorHandleTouchMove = (e) => {
         e.stopPropagation();
 
-        const x = e.changedTouches[0].clientX;
-        const y = e.changedTouches[0].clientY;
+        let x, y
+
+        if (e.changedTouches) {
+          x = e.changedTouches[0].clientX;
+          y = e.changedTouches[0].clientY;
+        } else {
+          x = e.clientX;
+          y= e.clientY
+        }
 
         const relativeX = x - this._containerBounds.left;
         const relativeY =
@@ -662,6 +675,12 @@ class MathInput extends React.Component {
         this._insertCursorAtClosestNode(x, adjustedY);
     };
 
+    onCursorHandleMouseMove = (e) => {
+      if (!('ontouchstart' in window)) {
+        return this.onCursorHandleTouchMove(e)
+      }
+    }
+
     /**
      * When the user releases the cursor handle, animate it back into place.
      *
@@ -672,6 +691,12 @@ class MathInput extends React.Component {
 
         this._updateCursorHandle(true);
     };
+
+    onCursorHandleMouseUp = (e) => {
+      if (!('ontouchstart' in window)) {
+        return this.onCursorHandleTouchEnd(e)
+      }
+    }
 
     /**
      * If the gesture is cancelled mid-drag, simply hide it.
@@ -753,6 +778,9 @@ class MathInput extends React.Component {
                 onTouchMove={this.onCursorHandleTouchMove}
                 onTouchEnd={this.onCursorHandleTouchEnd}
                 onTouchCancel={this.onCursorHandleTouchCancel}
+                onMouseDown={this.onCursorHandleMouseDown}
+                onMouseMove={this.onCursorHandleMouseMove}
+                onMouseUp={this.onCursorHandleMouseUp}
             />}
         </View>;
     }
