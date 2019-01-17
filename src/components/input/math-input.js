@@ -352,15 +352,14 @@ var MathInput = function (_React$Component) {
             });
         }, _this.handleClick = function (e) {
             e.stopPropagation();
-
+        }, _this.handleMouseDown = function (e) {
             if (!('ontouchstart' in window)) {
-                _this.asyncTouchStart(e);
-                _this.asyncTouchEnd(e);
+                _this.handleTouchStart(e);
             }
-        }, _this.asyncTouchStart = function (e) {
-            _this.handleTouchStart(e);
-        }, _this.asyncTouchEnd = function (e) {
-            _this.handleTouchEnd(e);
+        }, _this.handleMouseUp = function (e) {
+            if (!('ontouchstart' in window)) {
+                _this.handleTouchEnd(e);
+            }
         }, _this.handleTouchStart = function (e) {
             e.stopPropagation();
 
@@ -745,6 +744,8 @@ var MathInput = function (_React$Component) {
                     onTouchMove: this.handleTouchMove,
                     onTouchEnd: this.handleTouchEnd,
                     onClick: this.handleClick,
+                    onMouseDown: this.handleMouseDown,
+                    onMouseUp: this.handleMouseUp,
                     role: 'textbox',
                     ariaLabel: i18n._('Math input box')
                 },
