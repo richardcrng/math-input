@@ -778,9 +778,9 @@ class MathInput extends React.Component {
                 onTouchMove={this.onCursorHandleTouchMove}
                 onTouchEnd={this.onCursorHandleTouchEnd}
                 onTouchCancel={this.onCursorHandleTouchCancel}
-                onMouseDown={this.onCursorHandleMouseDown}
-                onMouseMove={this.onCursorHandleMouseMove}
-                onMouseUp={this.onCursorHandleMouseUp}
+                // onMouseDown={this.onCursorHandleMouseDown}
+                // onMouseMove={this.onCursorHandleMouseMove}
+                // onMouseUp={this.onCursorHandleMouseUp}
             />}
         </View>;
     }
