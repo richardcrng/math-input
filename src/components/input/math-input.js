@@ -423,6 +423,10 @@ var MathInput = function (_React$Component) {
 
             // Cache the container bounds, so as to avoid re-computing.
             _this._containerBounds = _this._container.getBoundingClientRect();
+        }, _this.onCursorHandleMouseDown = function (e) {
+            if (!('ontouchstart' in window)) {
+                _this.onCursorHandleTouchStart(e);
+            }
         }, _this._constrainToBound = function (value, min, max, friction) {
             if (value < min) {
                 return min + (value - min) * friction;
@@ -434,8 +438,16 @@ var MathInput = function (_React$Component) {
         }, _this.onCursorHandleTouchMove = function (e) {
             e.stopPropagation();
 
-            var x = e.changedTouches[0].clientX;
-            var y = e.changedTouches[0].clientY;
+            var x = void 0,
+                y = void 0;
+
+            if (e.changedTouches) {
+                x = e.changedTouches[0].clientX;
+                y = e.changedTouches[0].clientY;
+            } else {
+                x = e.clientX;
+                y = e.clientY;
+            }
 
             var relativeX = x - _this._containerBounds.left;
             var relativeY = y - 2 * cursorHandleRadiusPx * cursorHandleDistanceMultiplier - _this._containerBounds.top;
@@ -465,10 +477,18 @@ var MathInput = function (_React$Component) {
             var adjustedY = y - distanceAboveFingerToTrySelecting;
 
             _this._insertCursorAtClosestNode(x, adjustedY);
+        }, _this.onCursorHandleMouseMove = function (e) {
+            if (!('ontouchstart' in window)) {
+                return _this.onCursorHandleTouchMove(e);
+            }
         }, _this.onCursorHandleTouchEnd = function (e) {
             e.stopPropagation();
 
             _this._updateCursorHandle(true);
+        }, _this.onCursorHandleMouseUp = function (e) {
+            if (!('ontouchstart' in window)) {
+                return _this.onCursorHandleTouchEnd(e);
+            }
         }, _this.onCursorHandleTouchCancel = function (e) {
             e.stopPropagation();
 
@@ -763,7 +783,10 @@ var MathInput = function (_React$Component) {
                     onTouchStart: this.onCursorHandleTouchStart,
                     onTouchMove: this.onCursorHandleTouchMove,
                     onTouchEnd: this.onCursorHandleTouchEnd,
-                    onTouchCancel: this.onCursorHandleTouchCancel
+                    onTouchCancel: this.onCursorHandleTouchCancel,
+                    onMouseDown: this.onCursorHandleMouseDown,
+                    onMouseMove: this.onCursorHandleMouseMove,
+                    onMouseUp: this.onCursorHandleMouseUp
                 }))
             );
         }
