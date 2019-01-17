@@ -505,20 +505,20 @@ class MathInput extends React.Component {
             });
     };
 
-    async handleClick = (e) => {
+    handleClick = (e) => {
       e.stopPropagation();
 
       if (!('ontouchstart' in window)) {
-        await this.asyncTouchStart(e)
+        this.asyncTouchStart(e)
         this.asyncTouchEnd(e)
       }
     }
 
-    async asyncTouchStart = (e) => {
+    asyncTouchStart = (e) => {
       this.handleTouchStart(e)
     }
 
-    async asyncTouchEnd = (e) => {
+    asyncTouchEnd = (e) => {
       this.handleTouchEnd(e)
     }
 

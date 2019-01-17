@@ -350,6 +350,17 @@ var MathInput = function (_React$Component) {
             _this.props.keypadElement && _this.props.keypadElement.setCursor({
                 context: _this.mathField.contextForCursor(cursor)
             });
+        }, _this.handleClick = function (e) {
+            e.stopPropagation();
+
+            if (!('ontouchstart' in window)) {
+                _this.asyncTouchStart(e);
+                _this.asyncTouchEnd(e);
+            }
+        }, _this.asyncTouchStart = function (e) {
+            _this.handleTouchStart(e);
+        }, _this.asyncTouchEnd = function (e) {
+            _this.handleTouchEnd(e);
         }, _this.handleTouchStart = function (e) {
             e.stopPropagation();
 
@@ -733,9 +744,7 @@ var MathInput = function (_React$Component) {
                     onTouchStart: this.handleTouchStart,
                     onTouchMove: this.handleTouchMove,
                     onTouchEnd: this.handleTouchEnd,
-                    onClick: function onClick(e) {
-                        return e.stopPropagation();
-                    },
+                    onClick: this.handleClick,
                     role: 'textbox',
                     ariaLabel: i18n._('Math input box')
                 },
