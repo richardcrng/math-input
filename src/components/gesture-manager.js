@@ -21,7 +21,11 @@ var PopoverStateMachine = require('./popover-state-machine');
 var GestureStateMachine = require('./gesture-state-machine');
 
 var coordsForEvent = function coordsForEvent(evt) {
-    return [evt.changedTouches[0].clientX, evt.changedTouches[0].clientY];
+    if (evt.changedTouches) {
+        return [evt.changedTouches[0].clientX, evt.changedTouches[0].clientY];
+    } else {
+        return [evt.clientX, evt.clientY];
+    }
 };
 
 var GestureManager = function () {
@@ -120,7 +124,7 @@ var GestureManager = function () {
             // the starting node ID.
 
 
-            if ('ontouchstart' in window) {
+            if (evt.changedTouches) {
                 for (var i = 0; i < evt.changedTouches.length; i++) {
                     this.gestureStateMachine.onTouchStart(function () {
                         return id;
@@ -190,7 +194,7 @@ var GestureManager = function () {
                 x = _coordsForEvent6[0],
                 y = _coordsForEvent6[1];
 
-            if ('ontouchstart' in window) {
+            if (evt.changedTouches) {
                 for (var i = 0; i < evt.changedTouches.length; i++) {
                     this.gestureStateMachine.onTouchEnd(function () {
                         return _this3.nodeManager.idForCoords(x, y);
