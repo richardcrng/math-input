@@ -507,19 +507,18 @@ class MathInput extends React.Component {
 
     handleClick = (e) => {
       e.stopPropagation();
+    }
 
+    handleMouseDown = (e) => {
       if (!('ontouchstart' in window)) {
-        this.asyncTouchStart(e)
-        this.asyncTouchEnd(e)
+        this.handleTouchStart(e)
       }
     }
 
-    asyncTouchStart = (e) => {
-      this.handleTouchStart(e)
-    }
-
-    asyncTouchEnd = (e) => {
-      this.handleTouchEnd(e)
+    handleMouseUp = (e) => {
+      if (!('ontouchstart' in window)) {
+        this.handleTouchEnd(e)
+      }
     }
 
     handleTouchStart = (e) => {
@@ -730,6 +729,8 @@ class MathInput extends React.Component {
             onTouchMove={this.handleTouchMove}
             onTouchEnd={this.handleTouchEnd}
             onClick={this.handleClick}
+            onMouseDown={this.handleMouseDown}
+            onMouseUp={this.handleMouseUp}
             role={'textbox'}
             ariaLabel={i18n._('Math input box')}
         >
