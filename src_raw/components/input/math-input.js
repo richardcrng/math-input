@@ -512,6 +512,7 @@ class MathInput extends React.Component {
     handleMouseDown = (e) => {
       if (!('ontouchstart' in window)) {
         this.handleTouchStart(e)
+        this._insertCursorAtClosestNode(e.clientX, e.clientY)
       }
     }
 
