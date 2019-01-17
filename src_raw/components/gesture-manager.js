@@ -99,7 +99,7 @@ class GestureManager {
         // event on `changedTouches` originates from the node through which this
         // touch event was sent. In that case, we'd be inappropriately reporting
         // the starting node ID.
-        if (evt.changedTouches) {
+        if ('ontouchstart' in window) {
           for (let i = 0; i < evt.changedTouches.length; i++) {
             this.gestureStateMachine.onTouchStart(
               () => id,
@@ -158,7 +158,7 @@ class GestureManager {
 
         const [x, y] = coordsForEvent(evt);
         
-        if (evt.changedTouches) {
+        if ('ontouchstart' in window) {
           for (let i = 0; i < evt.changedTouches.length; i++) {
             this.gestureStateMachine.onTouchEnd(
               () => this.nodeManager.idForCoords(x, y),
