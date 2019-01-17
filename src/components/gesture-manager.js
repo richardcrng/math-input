@@ -120,7 +120,7 @@ var GestureManager = function () {
             // the starting node ID.
 
 
-            if (evt.changedTouches) {
+            if ('ontouchstart' in window) {
                 for (var i = 0; i < evt.changedTouches.length; i++) {
                     this.gestureStateMachine.onTouchStart(function () {
                         return id;
@@ -190,7 +190,7 @@ var GestureManager = function () {
                 x = _coordsForEvent6[0],
                 y = _coordsForEvent6[1];
 
-            if (evt.changedTouches) {
+            if ('ontouchstart' in window) {
                 for (var i = 0; i < evt.changedTouches.length; i++) {
                     this.gestureStateMachine.onTouchEnd(function () {
                         return _this3.nodeManager.idForCoords(x, y);
