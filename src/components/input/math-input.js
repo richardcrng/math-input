@@ -562,14 +562,25 @@ var MathInput = function (_React$Component) {
                         var touchDidStartInOrBelowKeypad = false;
                         if (_this2.props.keypadElement && _this2.props.keypadElement.getDOMNode()) {
                             var bounds = _this2._getKeypadBounds();
-                            for (var i = 0; i < evt.changedTouches.length; i++) {
-                                var _ref2 = [evt.changedTouches[i].clientX, evt.changedTouches[i].clientY],
-                                    x = _ref2[0],
-                                    y = _ref2[1];
 
+                            // Original KA code conditional on touchscreen
+                            if ('ontouchstart' in window) {
+                                for (var i = 0; i < evt.changedTouches.length; i++) {
+                                    var _ref2 = [evt.changedTouches[i].clientX, evt.changedTouches[i].clientY],
+                                        x = _ref2[0],
+                                        y = _ref2[1];
+
+                                    if (bounds.left <= x && bounds.right >= x && bounds.top <= y && bounds.bottom >= y || bounds.bottom < y) {
+                                        touchDidStartInOrBelowKeypad = true;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                // Make similar behaviour happen on a mouse event
+                                var x = evt.clientX;
+                                var y = evt.clientY;
                                 if (bounds.left <= x && bounds.right >= x && bounds.top <= y && bounds.bottom >= y || bounds.bottom < y) {
                                     touchDidStartInOrBelowKeypad = true;
-                                    break;
                                 }
                             }
                         }
@@ -611,9 +622,16 @@ var MathInput = function (_React$Component) {
                 }
             };
 
-            window.addEventListener('touchstart', this.recordTouchStartOutside);
-            window.addEventListener('touchend', this.blurOnTouchEndOutside);
-            window.addEventListener('touchcancel', this.blurOnTouchEndOutside);
+            if ('ontouchstart' in window) {
+                // Original Khan Academy code condition on touch device
+                window.addEventListener('touchstart', this.recordTouchStartOutside);
+                window.addEventListener('touchend', this.blurOnTouchEndOutside);
+                window.addEventListener('touchcancel', this.blurOnTouchEndOutside);
+            } else {
+                // Modified code to make it work for mouse events
+                window.addEventListener('mousedown', this.recordTouchStartOutside);
+                window.addEventListener('mouseup', this.blurOnTouchEndOutside);
+            }
 
             // HACK(benkomalo): if the window resizes, the keypad bounds can
             // change. That's a bit peeking into the internals of the keypad
@@ -643,9 +661,16 @@ var MathInput = function (_React$Component) {
         value: function componentWillUnmount() {
             this._isMounted = false;
 
-            window.removeEventListener('touchstart', this.recordTouchStartOutside);
-            window.removeEventListener('touchend', this.blurOnTouchEndOutside);
-            window.removeEventListener('touchcancel', this.blurOnTouchEndOutside);
+            if ('ontouchstart' in window) {
+                // Original clean up from Khan Academy code
+                window.removeEventListener('touchstart', this.recordTouchStartOutside);
+                window.removeEventListener('touchend', this.blurOnTouchEndOutside);
+                window.removeEventListener('touchcancel', this.blurOnTouchEndOutside);
+            } else {
+                window.removeEventListener('mousedown', this.recordTouchStartOutside);
+                window.removeEventListener('mouseup', this.blurOnTouchEndOutside);
+            }
+
             window.removeEventListener('resize', this._clearKeypadBoundsCache());
             window.removeEventListener('orientationchange', this._clearKeypadBoundsCache());
         }
