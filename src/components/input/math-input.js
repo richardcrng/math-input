@@ -809,10 +809,10 @@ var MathInput = function (_React$Component) {
                     onTouchStart: this.onCursorHandleTouchStart,
                     onTouchMove: this.onCursorHandleTouchMove,
                     onTouchEnd: this.onCursorHandleTouchEnd,
-                    onTouchCancel: this.onCursorHandleTouchCancel
-                    // onMouseDown={this.onCursorHandleMouseDown}
-                    // onMouseMove={this.onCursorHandleMouseMove}
-                    // onMouseUp={this.onCursorHandleMouseUp}
+                    onTouchCancel: this.onCursorHandleTouchCancel,
+                    onMouseDown: this.onCursorHandleMouseDown,
+                    onMouseMove: this.onCursorHandleMouseMove,
+                    onMouseUp: this.onCursorHandleMouseUp
                 }))
             );
         }
