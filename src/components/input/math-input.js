@@ -355,6 +355,7 @@ var MathInput = function (_React$Component) {
         }, _this.handleMouseDown = function (e) {
             if (!('ontouchstart' in window)) {
                 _this.handleTouchStart(e);
+                _this._insertCursorAtClosestNode(e.clientX, e.clientY);
             }
         }, _this.handleMouseUp = function (e) {
             if (!('ontouchstart' in window)) {
