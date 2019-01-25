@@ -89,7 +89,7 @@ var CursorHandle = function (_React$Component) {
                     onTouchCancel: this.props.onTouchCancel,
                     onMouseDown: this.props.onMouseDown,
                     onMouseMove: this.props.onMouseMove,
-                    onMouseEnd: this.props.onMouseEnd
+                    onMouseUp: this.props.onMouseUp
                 },
                 React.createElement(
                     'svg',
