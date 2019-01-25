@@ -46,8 +46,10 @@ var ProvidedKeypad = function (_React$Component) {
 
         return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ProvidedKeypad.__proto__ || Object.getPrototypeOf(ProvidedKeypad)).call.apply(_ref, [this].concat(args))), _this), _this.activate = function () {
             _this.store.dispatch(activateKeypad());
+            _this.props.onShow && _this.props.onShow();
         }, _this.dismiss = function () {
             _this.store.dispatch(dismissKeypad());
+            _this.props.onHide && _this.props.onHide();
         }, _this.configure = function (configuration, cb) {
             _this.store.dispatch(configureKeypad(configuration));
 
