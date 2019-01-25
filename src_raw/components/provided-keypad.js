@@ -24,10 +24,14 @@ class ProvidedKeypad extends React.Component {
 
     activate = () => {
         this.store.dispatch(activateKeypad());
+        this.props.onKeypadActive
+          && this.props.onKeypadActive();
     };
 
     dismiss = () => {
         this.store.dispatch(dismissKeypad());
+        this.props.onKeypadDismiss
+          && this.props.onKeypadDismiss();
     };
 
     configure = (configuration, cb) => {
