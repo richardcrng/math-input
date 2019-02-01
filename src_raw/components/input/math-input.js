@@ -543,6 +543,13 @@ class MathInput extends React.Component {
       }
     }
 
+    handleMouseMove = (e) => {
+      if (!('ontouchstart' in window)) {
+        this.handleTouchMove(e)
+        this._insertCursorAtClosestNode(e.clientX, e.clientY)
+      }
+    }
+
     handleMouseUp = (e) => {
       if (!('ontouchstart' in window)) {
         this.handleTouchEnd(e)
@@ -586,8 +593,10 @@ class MathInput extends React.Component {
         // the cursor is no longer visible and the input is no longer
         // highlighted).
         if (this.mathField.getContent() !== "" && this.state.focused) {
+          if (e.changedTouches) {
             const touch = e.changedTouches[0];
             this._insertCursorAtClosestNode(touch.clientX, touch.clientY);
+          }
         }
     };
 
@@ -783,6 +792,7 @@ class MathInput extends React.Component {
             onTouchEnd={this.handleTouchEnd}
             onClick={this.handleClick}
             onMouseDown={this.handleMouseDown}
+            onMouseMove={this.handleMouseMove}
             onMouseUp={this.handleMouseUp}
             role={'textbox'}
             ariaLabel={i18n._('Math input box')}
