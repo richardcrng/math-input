@@ -212,6 +212,7 @@ var KeypadButton = function (_React$PureComponent) {
                 onTouchStart = _props.onTouchStart,
                 onClick = _props.onClick,
                 onMouseDown = _props.onMouseDown,
+                onMouseMove = _props.onMouseMove,
                 onMouseUp = _props.onMouseUp,
                 popoverEnabled = _props.popoverEnabled,
                 style = _props.style,
@@ -227,7 +228,7 @@ var KeypadButton = function (_React$PureComponent) {
 
             var eventHandlers = {
                 onTouchCancel: onTouchCancel, onTouchEnd: onTouchEnd, onTouchMove: onTouchMove, onTouchStart: onTouchStart,
-                onClick: onClick, onMouseDown: onMouseDown, onMouseUp: onMouseUp
+                onClick: onClick, onMouseDown: onMouseDown, onMouseMove: onMouseMove, onMouseUp: onMouseUp
             };
 
             var maybeFocusBox = renderFocused && React.createElement(View, { style: focusStyle });
