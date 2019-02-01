@@ -67,7 +67,12 @@ class TouchableKeypadButton extends React.Component {
             },
             onMouseUp: (evt) => {
               if (!('ontouchstart' in window)) {
-                gestureManager.onTouchEnd(evt, id)
+                gestureManager.onTouchEnd(evt)
+              }
+            },
+            onMouseMove: (evt) => {
+              if (!('ontouchstart' in window)) {
+                gestureManager.onTouchMove(evt)
               }
             }
         };
