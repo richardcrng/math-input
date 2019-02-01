@@ -203,7 +203,7 @@ var ExpressionKeypad = function (_React$Component) {
                         keyConfig: KeyConfigs.FRAC,
                         style: roundTopRight && roundedTopRight
                     }),
-                    React.createElement(TouchableKeypadButton, { keyConfig: KeyConfigs.CDOT }),
+                    React.createElement(TouchableKeypadButton, { keyConfig: KeyConfigs.COMMA }),
                     React.createElement(TouchableKeypadButton, {
                         keyConfig: KeyConfigs.BACKSPACE,
                         borders: BorderStyles.LEFT
