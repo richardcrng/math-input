@@ -60,7 +60,11 @@ var KeyConfigs = (_KeyConfigs = {}, _defineProperty(_KeyConfigs, Keys.PLUS, {
 }), _defineProperty(_KeyConfigs, Keys.COMMA, {
     type: KeyTypes.OPERATOR,
     // I18N: A label for a comma.
-    ariaLabel: i18n._('Comma')
+    ariaLabel: i18n._('Comma'),
+    icon: {
+        type: IconTypes.TEXT,
+        data: ','
+    }
 }), _defineProperty(_KeyConfigs, Keys.PERCENT, {
     type: KeyTypes.OPERATOR,
     // I18N: A label for a percent sign.
