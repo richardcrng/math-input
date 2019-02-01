@@ -48,6 +48,11 @@ const KeyConfigs = {
             data: Keys.PERIOD,
         },
     },
+    [Keys.COMMA]: {
+        type: KeyTypes.OPERATOR,
+        // I18N: A label for a comma.
+        ariaLabel: i18n._('Comma'),
+    },
     [Keys.PERCENT]: {
         type: KeyTypes.OPERATOR,
         // I18N: A label for a percent sign.
