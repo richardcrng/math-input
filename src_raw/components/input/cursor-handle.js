@@ -80,6 +80,9 @@ class CursorHandle extends React.Component {
             onTouchMove={this.props.onTouchMove}
             onTouchEnd={this.props.onTouchEnd}
             onTouchCancel={this.props.onTouchCancel}
+            onMouseDown={this.props.onMouseDown}
+            onMouseMove={this.props.onMouseMove}
+            onMouseUp={this.props.onMouseUp}
         >
             <svg
                 width={cursorWidthPx}

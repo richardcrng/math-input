@@ -37,6 +37,8 @@ var View = function (_React$Component) {
                     className: className,
                     style: this.props.dynamicStyle,
                     onClick: this.props.onClick,
+                    onMouseDown: this.props.onMouseDown,
+                    onMouseUp: this.props.onMouseUp,
                     onTouchCancel: this.props.onTouchCancel,
                     onTouchEnd: this.props.onTouchEnd,
                     onTouchMove: this.props.onTouchMove,

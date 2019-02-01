@@ -175,7 +175,7 @@ class ExpressionKeypad extends React.Component {
                     keyConfig={KeyConfigs.FRAC}
                     style={roundTopRight && roundedTopRight}
                 />
-                <TouchableKeypadButton keyConfig={KeyConfigs.CDOT} />
+                <TouchableKeypadButton keyConfig={KeyConfigs.COMMA} />
                 <TouchableKeypadButton
                     keyConfig={KeyConfigs.BACKSPACE}
                     borders={BorderStyles.LEFT}

@@ -121,17 +121,30 @@ class MathInput extends React.Component {
                     if (this.props.keypadElement
                             && this.props.keypadElement.getDOMNode()) {
                         const bounds = this._getKeypadBounds();
-                        for (let i = 0; i < evt.changedTouches.length; i++) {
+                        
+                        // Original KA code conditional on touchscreen
+                        if ('ontouchstart' in window) {
+                          for (let i = 0; i < evt.changedTouches.length; i++) {
                             const [x, y] = [
-                                evt.changedTouches[i].clientX,
-                                evt.changedTouches[i].clientY,
+                              evt.changedTouches[i].clientX,
+                              evt.changedTouches[i].clientY,
                             ];
                             if ((bounds.left <= x && bounds.right >= x &&
-                                    bounds.top <= y && bounds.bottom >= y) ||
-                                    bounds.bottom < y) {
-                                touchDidStartInOrBelowKeypad = true;
-                                break;
+                              bounds.top <= y && bounds.bottom >= y) ||
+                              bounds.bottom < y) {
+                              touchDidStartInOrBelowKeypad = true;
+                              break;
                             }
+                          }
+                        } else {
+                          // Make similar behaviour happen on a mouse event
+                          const x = evt.clientX
+                          const y = evt.clientY
+                          if ((bounds.left <= x && bounds.right >= x &&
+                            bounds.top <= y && bounds.bottom >= y) ||
+                            bounds.bottom < y) {
+                            touchDidStartInOrBelowKeypad = true
+                          }
                         }
                     }
 
@@ -172,9 +185,16 @@ class MathInput extends React.Component {
             }
         };
 
-        window.addEventListener('touchstart', this.recordTouchStartOutside);
-        window.addEventListener('touchend', this.blurOnTouchEndOutside);
-        window.addEventListener('touchcancel', this.blurOnTouchEndOutside);
+        if ('ontouchstart' in window) {
+          // Original Khan Academy code condition on touch device
+          window.addEventListener('touchstart', this.recordTouchStartOutside);
+          window.addEventListener('touchend', this.blurOnTouchEndOutside);
+          window.addEventListener('touchcancel', this.blurOnTouchEndOutside);
+        } else {
+          // Modified code to make it work for mouse events
+          window.addEventListener('mousedown', this.recordTouchStartOutside);
+          window.addEventListener('mouseup', this.blurOnTouchEndOutside);
+        }
 
         // HACK(benkomalo): if the window resizes, the keypad bounds can
         // change. That's a bit peeking into the internals of the keypad
@@ -201,10 +221,17 @@ class MathInput extends React.Component {
 
     componentWillUnmount() {
         this._isMounted = false;
-
-        window.removeEventListener('touchstart', this.recordTouchStartOutside);
-        window.removeEventListener('touchend', this.blurOnTouchEndOutside);
-        window.removeEventListener('touchcancel', this.blurOnTouchEndOutside);
+        
+        if ('ontouchstart' in window) {
+          // Original clean up from Khan Academy code
+          window.removeEventListener('touchstart', this.recordTouchStartOutside);
+          window.removeEventListener('touchend', this.blurOnTouchEndOutside);
+          window.removeEventListener('touchcancel', this.blurOnTouchEndOutside);
+        } else {
+          window.removeEventListener('mousedown', this.recordTouchStartOutside);
+          window.removeEventListener('mouseup', this.blurOnTouchEndOutside);
+        }
+        
         window.removeEventListener('resize', this._clearKeypadBoundsCache());
         window.removeEventListener(
                 'orientationchange', this._clearKeypadBoundsCache());
@@ -505,6 +532,23 @@ class MathInput extends React.Component {
             });
     };
 
+    handleClick = (e) => {
+      e.stopPropagation();
+    }
+
+    handleMouseDown = (e) => {
+      if (!('ontouchstart' in window)) {
+        this.handleTouchStart(e)
+        this._insertCursorAtClosestNode(e.clientX, e.clientY)
+      }
+    }
+
+    handleMouseUp = (e) => {
+      if (!('ontouchstart' in window)) {
+        this.handleTouchEnd(e)
+      }
+    }
+
     handleTouchStart = (e) => {
         e.stopPropagation();
 
@@ -582,6 +626,12 @@ class MathInput extends React.Component {
         this._containerBounds = this._container.getBoundingClientRect();
     };
 
+    onCursorHandleMouseDown = (e) => {
+      if (!('ontouchstart' in window)) {
+        this.onCursorHandleTouchStart(e)
+      }
+    }
+
     _constrainToBound = (value, min, max, friction) => {
         if (value < min) {
             return min + (value - min) * friction;
@@ -601,8 +651,15 @@ class MathInput extends React.Component {
     onCursorHandleTouchMove = (e) => {
         e.stopPropagation();
 
-        const x = e.changedTouches[0].clientX;
-        const y = e.changedTouches[0].clientY;
+        let x, y
+
+        if (e.changedTouches) {
+          x = e.changedTouches[0].clientX;
+          y = e.changedTouches[0].clientY;
+        } else {
+          x = e.clientX;
+          y= e.clientY
+        }
 
         const relativeX = x - this._containerBounds.left;
         const relativeY =
@@ -646,6 +703,12 @@ class MathInput extends React.Component {
         this._insertCursorAtClosestNode(x, adjustedY);
     };
 
+    onCursorHandleMouseMove = (e) => {
+      if (!('ontouchstart' in window)) {
+        return this.onCursorHandleTouchMove(e)
+      }
+    }
+
     /**
      * When the user releases the cursor handle, animate it back into place.
      *
@@ -656,6 +719,12 @@ class MathInput extends React.Component {
 
         this._updateCursorHandle(true);
     };
+
+    onCursorHandleMouseUp = (e) => {
+      if (!('ontouchstart' in window)) {
+        return this.onCursorHandleTouchEnd(e)
+      }
+    }
 
     /**
      * If the gesture is cancelled mid-drag, simply hide it.
@@ -712,7 +781,9 @@ class MathInput extends React.Component {
             onTouchStart={this.handleTouchStart}
             onTouchMove={this.handleTouchMove}
             onTouchEnd={this.handleTouchEnd}
-            onClick={e => e.stopPropagation()}
+            onClick={this.handleClick}
+            onMouseDown={this.handleMouseDown}
+            onMouseUp={this.handleMouseUp}
             role={'textbox'}
             ariaLabel={i18n._('Math input box')}
         >
@@ -735,6 +806,9 @@ class MathInput extends React.Component {
                 onTouchMove={this.onCursorHandleTouchMove}
                 onTouchEnd={this.onCursorHandleTouchEnd}
                 onTouchCancel={this.onCursorHandleTouchCancel}
+                // onMouseDown={this.onCursorHandleMouseDown}
+                // onMouseMove={this.onCursorHandleMouseMove}
+                // onMouseUp={this.onCursorHandleMouseUp}
             />}
         </View>;
     }

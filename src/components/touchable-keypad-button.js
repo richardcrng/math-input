@@ -99,6 +99,16 @@ var TouchableKeypadButton = function (_React$Component) {
                 },
                 onTouchCancel: function onTouchCancel(evt) {
                     return gestureManager.onTouchCancel(evt);
+                },
+                onMouseDown: function onMouseDown(evt) {
+                    if (!('ontouchstart' in window)) {
+                        gestureManager.onTouchStart(evt, id);
+                    }
+                },
+                onMouseUp: function onMouseUp(evt) {
+                    if (!('ontouchstart' in window)) {
+                        gestureManager.onTouchEnd(evt, id);
+                    }
                 }
             };
 

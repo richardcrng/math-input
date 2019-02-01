@@ -350,6 +350,17 @@ var MathInput = function (_React$Component) {
             _this.props.keypadElement && _this.props.keypadElement.setCursor({
                 context: _this.mathField.contextForCursor(cursor)
             });
+        }, _this.handleClick = function (e) {
+            e.stopPropagation();
+        }, _this.handleMouseDown = function (e) {
+            if (!('ontouchstart' in window)) {
+                _this.handleTouchStart(e);
+                _this._insertCursorAtClosestNode(e.clientX, e.clientY);
+            }
+        }, _this.handleMouseUp = function (e) {
+            if (!('ontouchstart' in window)) {
+                _this.handleTouchEnd(e);
+            }
         }, _this.handleTouchStart = function (e) {
             e.stopPropagation();
 
@@ -413,6 +424,10 @@ var MathInput = function (_React$Component) {
 
             // Cache the container bounds, so as to avoid re-computing.
             _this._containerBounds = _this._container.getBoundingClientRect();
+        }, _this.onCursorHandleMouseDown = function (e) {
+            if (!('ontouchstart' in window)) {
+                _this.onCursorHandleTouchStart(e);
+            }
         }, _this._constrainToBound = function (value, min, max, friction) {
             if (value < min) {
                 return min + (value - min) * friction;
@@ -424,8 +439,16 @@ var MathInput = function (_React$Component) {
         }, _this.onCursorHandleTouchMove = function (e) {
             e.stopPropagation();
 
-            var x = e.changedTouches[0].clientX;
-            var y = e.changedTouches[0].clientY;
+            var x = void 0,
+                y = void 0;
+
+            if (e.changedTouches) {
+                x = e.changedTouches[0].clientX;
+                y = e.changedTouches[0].clientY;
+            } else {
+                x = e.clientX;
+                y = e.clientY;
+            }
 
             var relativeX = x - _this._containerBounds.left;
             var relativeY = y - 2 * cursorHandleRadiusPx * cursorHandleDistanceMultiplier - _this._containerBounds.top;
@@ -455,10 +478,18 @@ var MathInput = function (_React$Component) {
             var adjustedY = y - distanceAboveFingerToTrySelecting;
 
             _this._insertCursorAtClosestNode(x, adjustedY);
+        }, _this.onCursorHandleMouseMove = function (e) {
+            if (!('ontouchstart' in window)) {
+                return _this.onCursorHandleTouchMove(e);
+            }
         }, _this.onCursorHandleTouchEnd = function (e) {
             e.stopPropagation();
 
             _this._updateCursorHandle(true);
+        }, _this.onCursorHandleMouseUp = function (e) {
+            if (!('ontouchstart' in window)) {
+                return _this.onCursorHandleTouchEnd(e);
+            }
         }, _this.onCursorHandleTouchCancel = function (e) {
             e.stopPropagation();
 
@@ -531,14 +562,25 @@ var MathInput = function (_React$Component) {
                         var touchDidStartInOrBelowKeypad = false;
                         if (_this2.props.keypadElement && _this2.props.keypadElement.getDOMNode()) {
                             var bounds = _this2._getKeypadBounds();
-                            for (var i = 0; i < evt.changedTouches.length; i++) {
-                                var _ref2 = [evt.changedTouches[i].clientX, evt.changedTouches[i].clientY],
-                                    x = _ref2[0],
-                                    y = _ref2[1];
 
+                            // Original KA code conditional on touchscreen
+                            if ('ontouchstart' in window) {
+                                for (var i = 0; i < evt.changedTouches.length; i++) {
+                                    var _ref2 = [evt.changedTouches[i].clientX, evt.changedTouches[i].clientY],
+                                        x = _ref2[0],
+                                        y = _ref2[1];
+
+                                    if (bounds.left <= x && bounds.right >= x && bounds.top <= y && bounds.bottom >= y || bounds.bottom < y) {
+                                        touchDidStartInOrBelowKeypad = true;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                // Make similar behaviour happen on a mouse event
+                                var x = evt.clientX;
+                                var y = evt.clientY;
                                 if (bounds.left <= x && bounds.right >= x && bounds.top <= y && bounds.bottom >= y || bounds.bottom < y) {
                                     touchDidStartInOrBelowKeypad = true;
-                                    break;
                                 }
                             }
                         }
@@ -580,9 +622,16 @@ var MathInput = function (_React$Component) {
                 }
             };
 
-            window.addEventListener('touchstart', this.recordTouchStartOutside);
-            window.addEventListener('touchend', this.blurOnTouchEndOutside);
-            window.addEventListener('touchcancel', this.blurOnTouchEndOutside);
+            if ('ontouchstart' in window) {
+                // Original Khan Academy code condition on touch device
+                window.addEventListener('touchstart', this.recordTouchStartOutside);
+                window.addEventListener('touchend', this.blurOnTouchEndOutside);
+                window.addEventListener('touchcancel', this.blurOnTouchEndOutside);
+            } else {
+                // Modified code to make it work for mouse events
+                window.addEventListener('mousedown', this.recordTouchStartOutside);
+                window.addEventListener('mouseup', this.blurOnTouchEndOutside);
+            }
 
             // HACK(benkomalo): if the window resizes, the keypad bounds can
             // change. That's a bit peeking into the internals of the keypad
@@ -612,9 +661,16 @@ var MathInput = function (_React$Component) {
         value: function componentWillUnmount() {
             this._isMounted = false;
 
-            window.removeEventListener('touchstart', this.recordTouchStartOutside);
-            window.removeEventListener('touchend', this.blurOnTouchEndOutside);
-            window.removeEventListener('touchcancel', this.blurOnTouchEndOutside);
+            if ('ontouchstart' in window) {
+                // Original clean up from Khan Academy code
+                window.removeEventListener('touchstart', this.recordTouchStartOutside);
+                window.removeEventListener('touchend', this.blurOnTouchEndOutside);
+                window.removeEventListener('touchcancel', this.blurOnTouchEndOutside);
+            } else {
+                window.removeEventListener('mousedown', this.recordTouchStartOutside);
+                window.removeEventListener('mouseup', this.blurOnTouchEndOutside);
+            }
+
             window.removeEventListener('resize', this._clearKeypadBoundsCache());
             window.removeEventListener('orientationchange', this._clearKeypadBoundsCache());
         }
@@ -733,9 +789,9 @@ var MathInput = function (_React$Component) {
                     onTouchStart: this.handleTouchStart,
                     onTouchMove: this.handleTouchMove,
                     onTouchEnd: this.handleTouchEnd,
-                    onClick: function onClick(e) {
-                        return e.stopPropagation();
-                    },
+                    onClick: this.handleClick,
+                    onMouseDown: this.handleMouseDown,
+                    onMouseUp: this.handleMouseUp,
                     role: 'textbox',
                     ariaLabel: i18n._('Math input box')
                 },
@@ -754,6 +810,9 @@ var MathInput = function (_React$Component) {
                     onTouchMove: this.onCursorHandleTouchMove,
                     onTouchEnd: this.onCursorHandleTouchEnd,
                     onTouchCancel: this.onCursorHandleTouchCancel
+                    // onMouseDown={this.onCursorHandleMouseDown}
+                    // onMouseMove={this.onCursorHandleMouseMove}
+                    // onMouseUp={this.onCursorHandleMouseUp}
                 }))
             );
         }

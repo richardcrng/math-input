@@ -36,6 +36,7 @@ const KeyActions = {
         str: decimalSymbol,
         fn: WRITE,
     },
+    [Keys.COMMA]: {str: ',', fn: WRITE},
     [Keys.EQUAL]: {str: '=', fn: WRITE},
     [Keys.NEQ]: {str: '\\neq', fn: WRITE},
     [Keys.CDOT]: {str: '\\cdot', fn: WRITE},

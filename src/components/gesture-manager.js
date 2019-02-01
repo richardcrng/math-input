@@ -21,7 +21,11 @@ var PopoverStateMachine = require('./popover-state-machine');
 var GestureStateMachine = require('./gesture-state-machine');
 
 var coordsForEvent = function coordsForEvent(evt) {
-    return [evt.changedTouches[0].clientX, evt.changedTouches[0].clientY];
+    if (evt.changedTouches) {
+        return [evt.changedTouches[0].clientX, evt.changedTouches[0].clientY];
+    } else {
+        return [evt.clientX, evt.clientY];
+    }
 };
 
 var GestureManager = function () {
@@ -120,10 +124,17 @@ var GestureManager = function () {
             // the starting node ID.
 
 
-            for (var i = 0; i < evt.changedTouches.length; i++) {
+            if (evt.changedTouches) {
+                for (var i = 0; i < evt.changedTouches.length; i++) {
+                    this.gestureStateMachine.onTouchStart(function () {
+                        return id;
+                    }, evt.changedTouches[i].identifier, x);
+                }
+            } else {
+                // Mimic from mouse event
                 this.gestureStateMachine.onTouchStart(function () {
                     return id;
-                }, evt.changedTouches[i].identifier, x);
+                }, evt.identifier, x);
             }
 
             // If an event started in a view that we're managing, we'll handle it
@@ -183,10 +194,17 @@ var GestureManager = function () {
                 x = _coordsForEvent6[0],
                 y = _coordsForEvent6[1];
 
-            for (var i = 0; i < evt.changedTouches.length; i++) {
+            if (evt.changedTouches) {
+                for (var i = 0; i < evt.changedTouches.length; i++) {
+                    this.gestureStateMachine.onTouchEnd(function () {
+                        return _this3.nodeManager.idForCoords(x, y);
+                    }, evt.changedTouches[i].identifier, x);
+                }
+            } else {
+                // Mimic from mouse event
                 this.gestureStateMachine.onTouchEnd(function () {
                     return _this3.nodeManager.idForCoords(x, y);
-                }, evt.changedTouches[i].identifier, x);
+                }, evt.identifier, x);
             }
         }
 
