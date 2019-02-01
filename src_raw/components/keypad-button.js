@@ -188,6 +188,7 @@ class KeypadButton extends React.PureComponent {
             onTouchStart,
             onClick,
             onMouseDown,
+            onMouseMove,
             onMouseUp,
             popoverEnabled,
             style,
@@ -207,7 +208,7 @@ class KeypadButton extends React.PureComponent {
 
         const eventHandlers = {
             onTouchCancel, onTouchEnd, onTouchMove, onTouchStart,
-            onClick, onMouseDown, onMouseUp
+            onClick, onMouseDown, onMouseMove, onMouseUp
         };
 
         const maybeFocusBox = renderFocused && <View style={focusStyle} />;
